@@ -48,7 +48,7 @@ function ChatBotComponent() {
     const parts = String(message.text).split("```");
 
     return (
-      <ListGroup.Item >
+      <ListGroup.Item>
         <strong>{message.user}: </strong>
         {parts.map((part, i) =>
           i % 2 === 0 ? (
