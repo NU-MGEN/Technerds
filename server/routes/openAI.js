@@ -12,6 +12,8 @@ const configuration = new Configuration({
 
 const openAi = new OpenAIApi(configuration);
 
+let messagesArray = [];
+
 configureMessage = (message, role) => {
   if (role == "Student") {
     message =
@@ -40,12 +42,14 @@ router.post("/query", async (req, res) => {
   let message = req.body.message;
   let role = req.body.role;
   message = configureMessage(message, role);
-  //   console.log(message);
+  messagesArray.push({ role: "user", content: message });
   const completion = await openAi.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: message }],
+    messages: messagesArray,
   });
   if (completion.data.created) {
+    messagesArray.push(completion.data.choices[0].message);
+    console.log(messagesArray);
     res.json(completion.data.choices[0].message);
   }
 });
