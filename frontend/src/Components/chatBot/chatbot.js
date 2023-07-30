@@ -27,7 +27,7 @@ function ChatBotComponent() {
 
     try {
       const response = await axios.post(`http://localhost:7912/openAI/query`, {
-        role: "User", // or role: 'Bot', depending on your setup
+        role: "Student",
         message: message,
       });
 
