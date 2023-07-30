@@ -13,7 +13,7 @@ const openAi = new OpenAIApi(configuration);
 
 configureMessage = (message, role) => {
   if (role == "Student") {
-    message = "I am a learning Student and I just need a hint about " + message + " and ask me a return question to test my knowledge about the same.";
+    message = "I am a learning Student and I just need a hint about " + message + " and ask me a foundational question to test my knowledge about the same.";
   }
   if (role == "Professor") {
     message =
@@ -36,7 +36,7 @@ router.post("/query", async (req, res) => {
   let message = req.body.message;
   let role = "Student";
   message = configureMessage(message, role);
-  console.log(message);
+//   console.log(message);
   const completion = await openAi.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [{ role: "user", content: message }],
