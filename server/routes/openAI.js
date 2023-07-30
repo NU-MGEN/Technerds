@@ -19,11 +19,11 @@ configureMessage = (message, role) => {
     message =
       "I am a learning Student and I just need a hint about " +
       message +
-      " and ask me a foundational question to test my knowledge about the same.";
+      " and ask me a foundational question to test my knowledge about the same. I want full response in HTML Code.";
   }
   if (role == "Professor") {
     message =
-      "I am a Professor and I need a detailed explanation about  " + message;
+      "I am a Professor and I need a detailed explanation about  " + message+". I want full response in HTML Code.";
   }
   return message;
 };
