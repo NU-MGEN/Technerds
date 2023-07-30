@@ -1,0 +1,21 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Login from "./Components/Login/login";
+import ChatBot from "./Components/chatBot/chatbot";
+import Header from "./Components/Header/header";
+function App() {
+  return (
+    <div className="App">
+      <Header/>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/chatbot" element={<ChatBot />} />
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
