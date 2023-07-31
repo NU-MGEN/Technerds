@@ -30,7 +30,7 @@ let configureMessage = (message, role, keywords) => {
       });
     }
     message +=
-      ". Or else just say that topic is irrelevant. And most importantly, ask me a foundational question to test my knowledge about any concepts in the provided keywords.";
+      ". Or else dont give any information and just say that topic is irrelevant. And most importantly, ask me a foundational question to test my knowledge about any concepts in the provided keywords.";
   }
   if (role == "Professor") {
     message =
