@@ -25,8 +25,10 @@ function ChatBotComponent() {
     "Your AI Assistant is Offline! Please check your internet Connection!"
   );
   const [isloading, setResponseBool] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState("Please select a course");
-  const [showBot, setShowBot] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState(
+    "Please select a course"
+  );
+  const [showBot, setShowBot] = useState(false);
 
   const handleOnline = async (e) => {
     try {
@@ -48,20 +50,18 @@ function ChatBotComponent() {
     if (window.MathJax) {
       window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
     }
-    handleOnline();
+    // handleOnline();
   }, []);
 
   const handleSelectChange = (e) => {
     if (e.target.value !== "Please select a course") {
-      setShowBot(true)
+      setShowBot(true);
     }
 
-     if (e.target.value === "Please select a course") {
-       setShowBot(false);
-     }
-
-      setSelectedCourse(e.target.value);
-
+    if (e.target.value === "Please select a course") {
+      setShowBot(false);
+    }
+    setSelectedCourse(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -78,6 +78,7 @@ function ChatBotComponent() {
       const response = await axios.post(`http://localhost:7912/openAI/query`, {
         role: "Student",
         message: message,
+        keywords: [selectedCourse],
       });
 
       console.log("dta..", response.data.content);
@@ -115,6 +116,38 @@ function ChatBotComponent() {
     }
   };
 
+  const handleImageGeneration = async (e) => {
+    e.preventDefault();
+    setResponseBool(true);
+    const userMessage = {
+      text: message,
+      user: "Student",
+    };
+
+    setMessages([...messages, userMessage]);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:7912/openAI/generateImage`,
+        {
+          message: message,
+        }
+      );
+
+      console.log(response.data);
+      const botMessage = {
+        text: response.data.url,
+        user: "Tutor",
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+      setMessage(" ");
+      setResponseBool(false);
+    } catch (error) {
+      console.error("Error fetching AI response", error);
+    }
+  };
+
   const renderMessage = (message, index) => {
     console.log("message", message);
     const tempNewlineReplacement = "__TEMP_NEWLINE__";
@@ -122,6 +155,15 @@ function ChatBotComponent() {
     const parts = text.split(
       /(```.*?```|\$\$.*?\$\$|<.*?>|\\\(.+?\\\)|\\\[.+?\\\])/gs
     );
+
+    if (message.text.startsWith("https")) {
+      return (
+        <ListGroup.Item key={index}>
+          <strong>{message.user}: </strong>
+          <img src={message.text} className="mx-3" alt="Image is Loading" />
+        </ListGroup.Item>
+      );
+    }
 
     return (
       <ListGroup.Item key={index}>
@@ -151,7 +193,7 @@ function ChatBotComponent() {
               <div
                 key={i}
                 dangerouslySetInnerHTML={{
-                  __html: {mathJaxPart},
+                  __html: mathJaxPart,
                 }}
               />
             );
@@ -171,25 +213,24 @@ function ChatBotComponent() {
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
           <Container className="mt-5">
-            <Row className="justify-content-md-center">
-              <Col xs={12} md={4}>
+            <Row className="justify-content-center">
+              <Col xs={12} md={5}>
                 <Form.Select
                   aria-label="Default select example"
                   value={selectedCourse}
-                  onChange={handleSelectChange}
-                >
+                  onChange={handleSelectChange}>
                   <option>Please select a course</option>
-                  <option value="1">
-                    CSYE 6225. Network Structures and Cloud Computing.
+                  <option value="Network Structures and Cloud Computing">
+                    CSYE 6225. Network Structures and Cloud Computing
                   </option>
-                  <option value="2">
-                    CSYE 7200. Big-Data System Engineering Using Scala.
+                  <option value="Big-Data System Engineering Using Scala">
+                    CSYE 7200. Big-Data System Engineering Using Scala
                   </option>
-                  <option value="3">
-                    INFO 6105. Data Science Engineering Methods and Tools.
+                  <option value="Data Science Engineering Methods and Tools">
+                    INFO 6105. Data Science Engineering Methods and Tools
                   </option>
-                  <option value="4">
-                    INFO 6150. Web Design and User Experience Engineering.
+                  <option value="Web Design and User Experience Engineering">
+                    INFO 6150. Web Design and User Experience Engineering
                   </option>
                 </Form.Select>
               </Col>
@@ -238,12 +279,19 @@ function ChatBotComponent() {
                         </Button>
                         <Button
                           className="btn btn-danger"
-                          onClick={handleClear}
-                        >
+                          onClick={handleClear}>
                           <Trash3Fill />
                         </Button>
+                        <br />
                       </Form.Group>
                     </Form>
+                    <div className="row my-3 mx-5 px-5">
+                      <Button
+                        className="btn btn-warning"
+                        onClick={handleImageGeneration}>
+                        Generate Image
+                      </Button>
+                    </div>
                   </Card.Footer>
                 </Card>
               </Col>
