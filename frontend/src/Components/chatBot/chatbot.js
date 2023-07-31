@@ -9,6 +9,7 @@ import {
   Container,
   ListGroup,
   Card,
+  Spinner,
 } from "react-bootstrap";
 import { Trash3Fill } from "react-bootstrap-icons";
 import axios from "axios";
@@ -23,6 +24,9 @@ function ChatBotComponent() {
   const [onlineStatus, setOnlineStatus] = useState(
     "Your AI Assistant is Offline! Please check your internet Connection!"
   );
+  const [isloading, setResponseBool] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("Please select a course");
+  const [showBot, setShowBot] = useState(false)
 
   const handleOnline = async (e) => {
     try {
@@ -47,8 +51,22 @@ function ChatBotComponent() {
     handleOnline();
   }, []);
 
+  const handleSelectChange = (e) => {
+    if (e.target.value !== "Please select a course") {
+      setShowBot(true)
+    }
+
+     if (e.target.value === "Please select a course") {
+       setShowBot(false);
+     }
+
+      setSelectedCourse(e.target.value);
+
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setResponseBool(true);
     const userMessage = {
       text: message,
       user: "Student",
@@ -70,6 +88,7 @@ function ChatBotComponent() {
 
       setMessages((prevMessages) => [...prevMessages, botMessage]);
       setMessage(" ");
+      setResponseBool(false);
     } catch (error) {
       console.error("Error fetching AI response", error);
     }
@@ -151,44 +170,86 @@ function ChatBotComponent() {
           <span className="lead my-3">
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
+          <Container className="mt-5">
+            <Row className="justify-content-md-center">
+              <Col xs={12} md={4}>
+                <Form.Select
+                  aria-label="Default select example"
+                  value={selectedCourse}
+                  onChange={handleSelectChange}
+                >
+                  <option>Please select a course</option>
+                  <option value="1">
+                    CSYE 6225. Network Structures and Cloud Computing.
+                  </option>
+                  <option value="2">
+                    CSYE 7200. Big-Data System Engineering Using Scala.
+                  </option>
+                  <option value="3">
+                    INFO 6105. Data Science Engineering Methods and Tools.
+                  </option>
+                  <option value="4">
+                    INFO 6150. Web Design and User Experience Engineering.
+                  </option>
+                </Form.Select>
+              </Col>
+            </Row>
+          </Container>
         </Col>
         <br />
-
-        <Row className="justify-content-center">
-          <Col xs={12} md={6} lg={6}>
-            <Card className="my-3">
-              <Card.Body>
-                <ListGroup>
-                  {messages.map(renderMessage)}
-                  {/* {messages.map((message, index) => (
+        {showBot && (
+          <>
+            <Row className="justify-content-center">
+              <Col xs={12} md={6} lg={6}>
+                <Card className="my-3">
+                  <Card.Body>
+                    <ListGroup>
+                      {isloading ? (
+                        <div className="d-flex justify-content-center">
+                          <Spinner
+                            animation="border"
+                            role="status"
+                            className="me-2"
+                          />
+                          Fetching your answer
+                        </div>
+                      ) : (
+                        messages.map(renderMessage)
+                      )}
+                      {/* {messages.map((message, index) => (
                 <ListGroup.Item key={index}>
                   <strong>{message.user}: </strong> {message.text}
                 </ListGroup.Item>
               ))} */}
-                </ListGroup>
-              </Card.Body>
-              <Card.Footer>
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="d-flex">
-                    <Form.Control
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="What do you want to learn today?"
-                      className="me-3"
-                    />
-                    <Button type="submit" className="me-2">
-                      Send
-                    </Button>
-                    <Button className="btn btn-danger" onClick={handleClear}>
-                      <Trash3Fill />
-                    </Button>
-                  </Form.Group>
-                </Form>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
+                    </ListGroup>
+                  </Card.Body>
+                  <Card.Footer>
+                    <Form onSubmit={handleSubmit}>
+                      <Form.Group className="d-flex">
+                        <Form.Control
+                          type="text"
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          placeholder="What do you want to learn today?"
+                          className="me-3"
+                        />
+                        <Button type="submit" className="me-2">
+                          Send
+                        </Button>
+                        <Button
+                          className="btn btn-danger"
+                          onClick={handleClear}
+                        >
+                          <Trash3Fill />
+                        </Button>
+                      </Form.Group>
+                    </Form>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            </Row>
+          </>
+        )}
 
         <br />
         <Col>
