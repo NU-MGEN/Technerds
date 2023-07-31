@@ -12,6 +12,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { Trash3Fill } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -41,6 +42,7 @@ function ChatBotComponent() {
   const [errorMess, setError] = useState("");
   const [userRole, setUserRole] = useState("Student");
   const [gptRole, setGptRole] = useState("Professor");
+  const navigate = useNavigate();
 
   const course_code_map = {
     CSYE_6225: "Network Structures and Cloud Computing",
@@ -210,6 +212,11 @@ function ChatBotComponent() {
     }
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    navigate("/login");
+  };
+
   const renderMessage = (message, index) => {
     const tempNewlineReplacement = "__TEMP_NEWLINE__";
     let text = message.text.replace(/\n/g, tempNewlineReplacement);
@@ -273,6 +280,19 @@ function ChatBotComponent() {
           <span className="lead my-3">
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
+          <br />
+          <div className="row justify-content-end">
+            <div className="col-11"></div>
+            <div className="col-1">
+              <div className="row justify-content-end">
+                <Button
+                  className="btn btn-secondary mx-3"
+                  onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            </div>
+          </div>
           <Container className="mt-5">
             <Row className="justify-content-center">
               <Col xs={12} md={5}>
@@ -359,7 +379,6 @@ function ChatBotComponent() {
             </Row>
           </>
         )}
-
         <br />
         <Col>
           <div className="h6 text-center my-3">
