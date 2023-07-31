@@ -11,6 +11,8 @@ import {
 import axios from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import parse from "html-react-parser";
+import { InlineMath, BlockMath } from "react-katex";
 
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
@@ -38,27 +40,36 @@ function ChatBotComponent() {
       };
 
       setMessages((prevMessages) => [...prevMessages, botMessage]);
-      setMessage("");
+      setMessage(" ");
     } catch (error) {
       console.error("Error fetching AI response", error);
     }
   };
 
   const renderMessage = (message, index) => {
-    const parts = String(message.text).split("```");
+    console.log("message", message);
+    const parts = message.text.split(/(```|\$\$)/);
 
     return (
-      <ListGroup.Item>
+      <ListGroup.Item key={index}>
         <strong>{message.user}: </strong>
-        {parts.map((part, i) =>
-          i % 2 === 0 ? (
-            part
-          ) : (
-            <SyntaxHighlighter language="python" style={solarizedlight}>
-              {part}
-            </SyntaxHighlighter>
-          )
-        )}
+        {parts.map((part, i) => {
+          if (part.startsWith("```") && part.endsWith("```")) {
+            const code = part.slice(3, -3);
+            return (
+              <SyntaxHighlighter language="python" style={solarizedlight}>
+                {code}
+              </SyntaxHighlighter>
+            );
+          } else if (part.startsWith("$$") && part.endsWith("$$")) {
+            const latex = part.slice(2, -2);
+            return <BlockMath>{latex}</BlockMath>;
+          } else if (part.startsWith("<") && part.endsWith(">")) {
+            return parse(part);
+          } else {
+            return part;
+          }
+        })}
       </ListGroup.Item>
     );
   };
