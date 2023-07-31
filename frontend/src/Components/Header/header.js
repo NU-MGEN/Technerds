@@ -21,7 +21,7 @@ const Header = () => {
                   height="38"
                   className="me-3"
                   alt="Omni-Bot Logo"></img>
-                Welcome To OmniBot. Experience Best Learning Ever.
+                Welcome to the Best Learning Experience Ever with OmniBot.
               </span>
             </li>
           </ul>

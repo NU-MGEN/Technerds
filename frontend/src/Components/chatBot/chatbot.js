@@ -17,7 +17,7 @@ import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [onlineStatus, setOnlineStatus] = useState("");
+  const [onlineStatus, setOnlineStatus] = useState("Your AI Assistant is Offline! Please check your internet Connection!");
 
   const handleOnline = async (e) => {
     try {
@@ -30,13 +30,13 @@ function ChatBotComponent() {
       }
     } catch (err) {
       setOnlineStatus(
-        "AI Assistant is Offline! Please check your internet Connection!"
+        "Your AI Assistant is Offline! Please check your internet Connection!"
       );
     }
   };
 
   useEffect(() => {
-    handleOnline();
+    // handleOnline();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -127,7 +127,7 @@ function ChatBotComponent() {
             Powered by Tech Leads of Industry - Microsoft, Phillips, Amazon, Vui.com, Gaia AI, Squark AI.
           </div>
           <div className="h6 text-center my-3">
-          Co-Powered by our lovely Northeastern University.
+          Co-Powered by our best ever, Northeastern University.
           </div>
         </Col>
       </Row>

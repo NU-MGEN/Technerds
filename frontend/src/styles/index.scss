@@ -1,4 +1,14 @@
+/** @format */
+
+body {
+  background: url("../assets/Background.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: white;
+}
 .navbar-dark-work {
-    background: black;
-    color: white;
+  background: black;
+  color: white;
 }
