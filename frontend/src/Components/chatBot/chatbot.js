@@ -61,6 +61,7 @@ function ChatBotComponent() {
     if (e.target.value === "Please select a course") {
       setShowBot(false);
     }
+
     setSelectedCourse(e.target.value);
   };
 

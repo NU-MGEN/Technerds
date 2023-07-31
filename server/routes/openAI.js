@@ -86,4 +86,16 @@ router.post("/query", async (req, res) => {
   }
 });
 
+router.post("/generateImage", async (req, res) => {
+  const message = req.body.message;
+  const numberOfImages = 1;
+  const imageSize = "256x256";
+  const completion = await openAi.createImage({
+    prompt: message,
+    n: numberOfImages,
+    size: imageSize,
+  });
+  res.send(completion.data.data[0]);
+});
+
 module.exports = router;
