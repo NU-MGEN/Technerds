@@ -40,6 +40,19 @@ router.get("/statusCheck", async (req, res) => {
   }
 });
 
+router.get("/clearChat", async (req, res) => {
+  messagesArray = [{role:"user", content: "Hello."}];
+  console.log("Hit Clear");
+  const completion = await openAi.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: messagesArray,
+  });
+  if (completion.data.created) {
+    console.log(messagesArray);
+    res.json(completion.data.choices[0].message);
+  }
+});
+
 router.post("/query", async (req, res) => {
   let message = req.body.message;
   let role = req.body.role;

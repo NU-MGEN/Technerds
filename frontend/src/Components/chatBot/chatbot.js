@@ -10,6 +10,7 @@ import {
   ListGroup,
   Card,
 } from "react-bootstrap";
+import { Trash3Fill } from "react-bootstrap-icons";
 import axios from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -70,43 +71,59 @@ function ChatBotComponent() {
       console.error("Error fetching AI response", error);
     }
   };
+  const handleClear = async (e) => {
+    e.preventDefault();
 
-  
+    try {
+      const response = await axios.get(`http://localhost:7912/openAI/clearChat`);
+      console.log(response);
+      const botMessage = {
+        text: response.data.content+" Cleared your History and connected back to your tutor again! Happy Learning!",
+        user: "OmniBot",
+      };
+
+      setMessages((prevMessages) => [botMessage]);
+      setMessage("");
+    } catch (error) {
+      console.error("Error fetching AI response", error);
+    }
+  };
+
   const renderMessage = (message, index) => {
-  console.log("message",message)
-  const tempNewlineReplacement = "__TEMP_NEWLINE__";
-  let text = message.text.replace(/\n/g, tempNewlineReplacement);
-  const parts = text.split(/(```.*?```|\$\$.*?\$\$|<.*?>)/gs);
+    console.log("message", message);
+    const tempNewlineReplacement = "__TEMP_NEWLINE__";
+    let text = message.text.replace(/\n/g, tempNewlineReplacement);
+    const parts = text.split(/(```.*?```|\$\$.*?\$\$|<.*?>)/gs);
 
-  return (
-    <ListGroup.Item key={index}>
-      <strong>{message.user}: </strong>
-      {parts.map((part, i) => {
-        if (part.startsWith("```") && part.endsWith("```")) {
-          const code = part
-            .slice(3, -3)
-            .trim()
-            .replace(/__TEMP_NEWLINE__/g, "\n");
-          return (
-            <SyntaxHighlighter language="python" style={solarizedlight}>
-              {code}
-            </SyntaxHighlighter>
-          );
-        } else if (part.startsWith("$$") && part.endsWith("$$")) {
-          const latex = part
-            .slice(2, -2)
-            .trim()
-            .replace(/__TEMP_NEWLINE__/g, "\n");
-          return <BlockMath>{latex}</BlockMath>;
-        } else if (/<.*?>/gs.test(part)) {
-          return parse(part);
-        } else {
-          return part.replace(/__TEMP_NEWLINE__/g, "\n");
-        }
-      })}
-    </ListGroup.Item>
-  );
-};
+    return (
+      <ListGroup.Item key={index}>
+        <strong>{message.user}: </strong>
+        {parts.map((part, i) => {
+          if (part.startsWith("```") && part.endsWith("```")) {
+            const code = part
+              .slice(3, -3)
+              .trim()
+              .replace(/__TEMP_NEWLINE__/g, "\n");
+            return (
+              <SyntaxHighlighter language="python" style={solarizedlight}>
+                {code}
+              </SyntaxHighlighter>
+            );
+          } else if (part.startsWith("$$") && part.endsWith("$$")) {
+            const latex = part
+              .slice(2, -2)
+              .trim()
+              .replace(/__TEMP_NEWLINE__/g, "\n");
+            return <BlockMath>{latex}</BlockMath>;
+          } else if (/<.*?>/gs.test(part)) {
+            return parse(part);
+          } else {
+            return part.replace(/__TEMP_NEWLINE__/g, "\n");
+          }
+        })}
+      </ListGroup.Item>
+    );
+  };
 
   return (
     <Container fluid className="my-3">
@@ -141,7 +158,8 @@ function ChatBotComponent() {
                       placeholder="What do you want to learn today?"
                       className="me-3"
                     />
-                    <Button type="submit">Send</Button>
+                    <Button type="submit" className="me-2">Send</Button>
+                    <Button className="btn btn-danger" onClick={handleClear}><Trash3Fill /></Button>
                   </Form.Group>
                 </Form>
               </Card.Footer>
