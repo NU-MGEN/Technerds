@@ -277,6 +277,10 @@ function ChatBotComponent() {
     <Container fluid className="my-3">
       <Row>
         <Col xs={12} md={12} lg={12}>
+          <div className="row justify-content-center b">
+            Hi, {name}
+          </div>
+          <br />
           <span className="lead my-3">
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
@@ -353,12 +357,10 @@ function ChatBotComponent() {
                           placeholder="What do you want to learn today?"
                           className="me-3"
                         />
-                        <Button type="submit" className="me-2">
+                        <Button type="submit" className="me-2 btn btn-success">
                           Send
                         </Button>
-                        <Button
-                          className="btn btn-danger"
-                          onClick={handleClear}>
+                        <Button className="btn btn-dark" onClick={handleClear}>
                           <Trash3Fill />
                         </Button>
                         <br />
