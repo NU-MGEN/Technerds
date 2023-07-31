@@ -66,8 +66,10 @@ function ChatBotComponent() {
   };
 
   const location = useLocation();
+  let [name, setName] = useState("");
   useEffect(() => {
-    const receivedData = location.state || "";
+    const receivedData = location.state.role || "";
+    setName(location.state.name);
     if (receivedData === "Professor") {
       setUserRole("Professor");
       setGptRole("OmniBot");
