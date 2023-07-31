@@ -132,7 +132,7 @@ function ChatBotComponent() {
               <div
                 key={i}
                 dangerouslySetInnerHTML={{
-                  __html: mathJaxPart,
+                  __html: {mathJaxPart},
                 }}
               />
             );

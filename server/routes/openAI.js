@@ -14,12 +14,23 @@ const openAi = new OpenAIApi(configuration);
 
 let messagesArray = [];
 
-configureMessage = (message, role) => {
+let configureMessage = (message, role, keywords) => {
   if (role == "Student") {
     message =
       "I am a learning Student and I just need a hint about " +
       message +
-      " and ask me a foundational question to test my knowledge about the same. I want full text response in HTML Code If you cannot write code in HTML and If the question is mathematical derivation give me latex response else write in Python and provide me the code";
+      ". I want full text response in HTML Code If you cannot write code in HTML and If the question is mathematical derivation give me MathJax response else write in Python and provide me the code";
+    if (keywords.length === 0) {
+      message += ".";
+    } else {
+      message +=
+        ". And most importantly, only provide me a response if related to the keywords: ";
+      keywords.map((word, index) => {
+        message += word;
+      });
+    }
+    message +=
+      ". Or else just say that topic is irrelevant. And most importantly, ask me a foundational question to test my knowledge about any concepts in the provided keywords.";
   }
   if (role == "Professor") {
     message =
@@ -41,7 +52,7 @@ router.get("/statusCheck", async (req, res) => {
 });
 
 router.get("/clearChat", async (req, res) => {
-  messagesArray = [{role:"user", content: "Hello."}];
+  messagesArray = [{ role: "user", content: "Hello." }];
   console.log("Hit Clear");
   const completion = await openAi.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -56,7 +67,13 @@ router.get("/clearChat", async (req, res) => {
 router.post("/query", async (req, res) => {
   let message = req.body.message;
   let role = req.body.role;
-  message = configureMessage(message, role);
+  let keywords = req.body.keywords;
+  message = configureMessage(
+    req.body.message,
+    req.body.role,
+    req.body.keywords
+  );
+  console.log(message);
   messagesArray.push({ role: "user", content: message });
   const completion = await openAi.createChatCompletion({
     model: "gpt-3.5-turbo",
