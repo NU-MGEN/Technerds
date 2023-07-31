@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    console.log("entering")
+    console.log("entering");
     event.preventDefault();
     setRole("student");
     navigate("/chatbot", { state: { role: "student" } });
