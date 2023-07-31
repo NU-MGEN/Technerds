@@ -25,8 +25,10 @@ function ChatBotComponent() {
     "Your AI Assistant is Offline! Please check your internet Connection!"
   );
   const [isloading, setResponseBool] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState("Please select a course");
-  const [showBot, setShowBot] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState(
+    "Please select a course"
+  );
+  const [showBot, setShowBot] = useState(false);
 
   const handleOnline = async (e) => {
     try {
@@ -48,20 +50,19 @@ function ChatBotComponent() {
     if (window.MathJax) {
       window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
     }
-    handleOnline();
+    // handleOnline();
   }, []);
 
   const handleSelectChange = (e) => {
     if (e.target.value !== "Please select a course") {
-      setShowBot(true)
+      setShowBot(true);
     }
 
-     if (e.target.value === "Please select a course") {
-       setShowBot(false);
-     }
+    if (e.target.value === "Please select a course") {
+      setShowBot(false);
+    }
 
-      setSelectedCourse(e.target.value);
-
+    setSelectedCourse(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -110,6 +111,31 @@ function ChatBotComponent() {
 
       setMessages((prevMessages) => [botMessage]);
       setMessage("");
+    } catch (error) {
+      console.error("Error fetching AI response", error);
+    }
+  };
+
+  const handleImageGeneration = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `http://localhost:7912/openAI/generateImage`,
+        {
+          message: message,
+        }
+      );
+
+      console.log(response.data);
+      const botMessage = {
+        text: response.data.url,
+        user: "Tutor",
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+      setMessage(" ");
+      setResponseBool(false);
     } catch (error) {
       console.error("Error fetching AI response", error);
     }
@@ -176,8 +202,7 @@ function ChatBotComponent() {
                 <Form.Select
                   aria-label="Default select example"
                   value={selectedCourse}
-                  onChange={handleSelectChange}
-                >
+                  onChange={handleSelectChange}>
                   <option>Please select a course</option>
                   <option value="1">
                     CSYE 6225. Network Structures and Cloud Computing.
@@ -238,12 +263,19 @@ function ChatBotComponent() {
                         </Button>
                         <Button
                           className="btn btn-danger"
-                          onClick={handleClear}
-                        >
+                          onClick={handleClear}>
                           <Trash3Fill />
                         </Button>
+                        <br />
                       </Form.Group>
                     </Form>
+                    <div className="row my-3 mx-5 px-5">
+                      <Button
+                        className="btn btn-warning"
+                        onClick={handleImageGeneration}>
+                        Generate Image
+                      </Button>
+                    </div>
                   </Card.Footer>
                 </Card>
               </Col>
