@@ -1,8 +1,6 @@
 /** @format */
 
 import React from "react";
-import { Navbar, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import logo  from "../../assets/OmniBotRoundedCorners.png";
 
 const Header = () => {

@@ -17,7 +17,9 @@ import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [onlineStatus, setOnlineStatus] = useState("Your AI Assistant is Offline! Please check your internet Connection!");
+  const [onlineStatus, setOnlineStatus] = useState(
+    "Your AI Assistant is Offline! Please check your internet Connection!"
+  );
 
   const handleOnline = async (e) => {
     try {
@@ -25,7 +27,7 @@ function ChatBotComponent() {
         `http://localhost:7912/openAI/statusCheck`
       );
       console.log(response);
-      if (response.status == 200) {
+      if (response.status === 200) {
         setOnlineStatus(response.data.content);
       }
     } catch (err) {
@@ -36,7 +38,7 @@ function ChatBotComponent() {
   };
 
   useEffect(() => {
-    // handleOnline();
+    handleOnline();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -93,41 +95,47 @@ function ChatBotComponent() {
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
         </Col>
-        <br/>
-        <Col xs={12} md={12} lg={12}>
-          <Card className="my-3">
-            <Card.Body>
-              <ListGroup>
-                {messages.map(renderMessage)}
-                {/* {messages.map((message, index) => (
-                  <ListGroup.Item key={index}>
-                    <strong>{message.user}: </strong> {message.text}
-                  </ListGroup.Item>
-                ))} */}
-              </ListGroup>
-            </Card.Body>
-            <Card.Footer>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="d-flex">
-                  <Form.Control
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Enter your message"
-                  />
-                  <Button type="submit">Send</Button>
-                </Form.Group>
-              </Form>
-            </Card.Footer>
-          </Card>
-        </Col>
-        <br/>
+        <br />
+
+        <Row className="justify-content-center">
+          <Col xs={12} md={6} lg={6}>
+            <Card className="my-3">
+              <Card.Body>
+                <ListGroup>
+                  {messages.map(renderMessage)}
+                  {/* {messages.map((message, index) => (
+                <ListGroup.Item key={index}>
+                  <strong>{message.user}: </strong> {message.text}
+                </ListGroup.Item>
+              ))} */}
+                </ListGroup>
+              </Card.Body>
+              <Card.Footer>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="d-flex">
+                    <Form.Control
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="What do you want to learn today?"
+                      className="me-3"
+                    />
+                    <Button type="submit">Send</Button>
+                  </Form.Group>
+                </Form>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+
+        <br />
         <Col>
           <div className="h6 text-center my-3">
-            Powered by Tech Leads of Industry - Microsoft, Phillips, Amazon, Vui.com, Gaia AI, Squark AI.
+            Powered by Tech Leads of Industry - Microsoft, Phillips, Amazon,
+            Vui.com, Gaia AI, Squark AI.
           </div>
           <div className="h6 text-center my-3">
-          Co-Powered by our best ever, Northeastern University.
+            Co-Powered by our best ever, Northeastern University.
           </div>
         </Col>
       </Row>
