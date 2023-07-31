@@ -1,0 +1,11 @@
+/** @format */
+body {
+  background: url("../assets/Background.jpeg") no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+}
+
+.navbar-dark-work {
+  background: black;
+  color: white;
+}/*# sourceMappingURL=index.css.map */
