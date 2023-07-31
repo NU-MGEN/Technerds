@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/chatbot" element={<ChatBot />} />
-          <Route path="/" element={<ChatBot />} />
+          <Route path="/" element={<Login />} />
         </Routes>
       </Router>
     </div>

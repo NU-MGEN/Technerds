@@ -12,16 +12,15 @@ const Login = () => {
   const handleSubmit = (event) => {
     console.log("entering");
     event.preventDefault();
-    setRole("student");
-    navigate("/chatbot", { state: { role: "student" } });
+    navigate("/chatbot", { state: "Professor" });
     // Implement authentication logic here
-    if (userId === "validUserId" && password === "validPassword") {
-      setRole("student");
-      console.log(
-        `Logging in with User ID: ${userId} and Password: ${password}`
-      );
-      navigate("/chatbot", role); // Change from history.push to navigate
-    }
+    // if (userId === "validUserId" && password === "validPassword") {
+    //   setRole("student");
+    //   console.log(
+    //     `Logging in with User ID: ${userId} and Password: ${password}`
+    //   );
+    //   navigate("/chatbot", { state: "Professor" }); // Change from history.push to navigate
+    // }
   };
 
   return (

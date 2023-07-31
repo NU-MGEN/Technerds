@@ -25,6 +25,7 @@ import {
   INFO_6150,
 } from "../../constants/keywords";
 import { searchKeyword } from "../../utils/searchKeywords";
+import { useLocation } from "react-router";
 
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
@@ -39,7 +40,7 @@ function ChatBotComponent() {
   const [showBot, setShowBot] = useState(false);
   const [errorMess, setError] = useState("");
   const [userRole, setUserRole] = useState("Student");
-  const [gptRole, setGptRole] = useState("Tutor");
+  const [gptRole, setGptRole] = useState("Professor");
 
   const course_code_map = {
     CSYE_6225: "Network Structures and Cloud Computing",
@@ -64,7 +65,13 @@ function ChatBotComponent() {
     }
   };
 
+  const location = useLocation();
   useEffect(() => {
+    const receivedData = location.state || "";
+    if (receivedData === "Professor") {
+      setUserRole("Professor");
+      setGptRole("OmniBot");
+    }
     if (window.MathJax) {
       window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
     }
@@ -93,7 +100,8 @@ function ChatBotComponent() {
     };
     let { key, found } = searchKeyword(object_to_send[selectedCourse], message);
     console.log(key);
-    found = messages.length > 1 ? (found = true) : found;
+    found =
+      messages.length > 1 || userRole == "Professor" ? (found = true) : found;
     if (found) {
       setResponseBool(true);
       const userMessage = {
