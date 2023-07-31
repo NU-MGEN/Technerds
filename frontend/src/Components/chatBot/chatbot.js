@@ -66,7 +66,7 @@ function ChatBotComponent() {
     if (window.MathJax) {
       window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
     }
-    // handleOnline();
+    handleOnline();
   }, []);
 
   const handleSelectChange = (e) => {
@@ -91,7 +91,7 @@ function ChatBotComponent() {
     };
     let { key, found } = searchKeyword(object_to_send[selectedCourse], message);
     console.log(key);
-
+   found = messages.length >1 ? found = true :found
     if (found) {
       setResponseBool(true);
       const userMessage = {
