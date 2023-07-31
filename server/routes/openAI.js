@@ -36,7 +36,7 @@ let configureMessage = (message, role, keywords) => {
     message =
       "I am a Professor and I need a detailed explanation about  " +
       message +
-      ". I want full response in HTML Code. I want full response in HTML Code. If you cannot write code in HTML, write in Python and provide me the code.";
+      ". If the question is mathematical derivation give me MathJax response else write in Python and provide me the code.";
   }
   return message;
 };
