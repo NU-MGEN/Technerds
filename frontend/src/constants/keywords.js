@@ -1,3 +1,5 @@
+/** @format */
+
 const CSYE_6225 = {
   prerequisites: {
     "Programming Language": ["Java"],
