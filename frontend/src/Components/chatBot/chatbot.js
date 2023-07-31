@@ -118,6 +118,13 @@ function ChatBotComponent() {
 
   const handleImageGeneration = async (e) => {
     e.preventDefault();
+    setResponseBool(true);
+    const userMessage = {
+      text: message,
+      user: "Student",
+    };
+
+    setMessages([...messages, userMessage]);
 
     try {
       const response = await axios.post(
@@ -148,6 +155,15 @@ function ChatBotComponent() {
     const parts = text.split(
       /(```.*?```|\$\$.*?\$\$|<.*?>|\\\(.+?\\\)|\\\[.+?\\\])/gs
     );
+
+    if (message.text.startsWith("https")) {
+      return (
+        <ListGroup.Item key={index}>
+          <strong>{message.user}: </strong>
+          <img src={message.text} className="mx-3" alt="Image is Loading" />
+        </ListGroup.Item>
+      );
+    }
 
     return (
       <ListGroup.Item key={index}>
@@ -197,8 +213,8 @@ function ChatBotComponent() {
             OmniBot Status: <span className="h6">{onlineStatus}</span>
           </span>
           <Container className="mt-5">
-            <Row className="justify-content-md-center">
-              <Col xs={12} md={4}>
+            <Row className="justify-content-center">
+              <Col xs={12} md={5}>
                 <Form.Select
                   aria-label="Default select example"
                   value={selectedCourse}
