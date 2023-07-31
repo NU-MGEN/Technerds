@@ -282,11 +282,11 @@ function ChatBotComponent() {
           </span>
           <br />
           <div className="row justify-content-end">
-            <div className="col-11"></div>
-            <div className="col-1">
-              <div className="row justify-content-end">
+            <div className="col-xs-12 col-sm-12 col-md-11"></div>
+            <div className="col-xs-12 col-sm-12 col-md-1">
+              <div className="row px-3">
                 <Button
-                  className="btn btn-secondary mx-3"
+                  className="btn btn-secondary"
                   onClick={handleLogout}>
                   Logout
                 </Button>
