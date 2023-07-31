@@ -50,7 +50,7 @@ function ChatBotComponent() {
     if (window.MathJax) {
       window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
     }
-    // handleOnline();
+    handleOnline();
   }, []);
 
   const handleSelectChange = (e) => {
