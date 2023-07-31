@@ -71,33 +71,42 @@ function ChatBotComponent() {
     }
   };
 
+  
   const renderMessage = (message, index) => {
-    console.log("message", message);
-    const parts = message.text.split(/(```|\$\$)/);
+  console.log("message",message)
+  const tempNewlineReplacement = "__TEMP_NEWLINE__";
+  let text = message.text.replace(/\n/g, tempNewlineReplacement);
+  const parts = text.split(/(```.*?```|\$\$.*?\$\$|<.*?>)/gs);
 
-    return (
-      <ListGroup.Item key={index}>
-        <strong>{message.user}: </strong>
-        {parts.map((part, i) => {
-          if (part.startsWith("```") && part.endsWith("```")) {
-            const code = part.slice(3, -3);
-            return (
-              <SyntaxHighlighter language="python" style={solarizedlight}>
-                {code}
-              </SyntaxHighlighter>
-            );
-          } else if (part.startsWith("$$") && part.endsWith("$$")) {
-            const latex = part.slice(2, -2);
-            return <BlockMath>{latex}</BlockMath>;
-          } else if (part.startsWith("<") && part.endsWith(">")) {
-            return parse(part);
-          } else {
-            return part;
-          }
-        })}
-      </ListGroup.Item>
-    );
-  };
+  return (
+    <ListGroup.Item key={index}>
+      <strong>{message.user}: </strong>
+      {parts.map((part, i) => {
+        if (part.startsWith("```") && part.endsWith("```")) {
+          const code = part
+            .slice(3, -3)
+            .trim()
+            .replace(/__TEMP_NEWLINE__/g, "\n");
+          return (
+            <SyntaxHighlighter language="python" style={solarizedlight}>
+              {code}
+            </SyntaxHighlighter>
+          );
+        } else if (part.startsWith("$$") && part.endsWith("$$")) {
+          const latex = part
+            .slice(2, -2)
+            .trim()
+            .replace(/__TEMP_NEWLINE__/g, "\n");
+          return <BlockMath>{latex}</BlockMath>;
+        } else if (/<.*?>/gs.test(part)) {
+          return parse(part);
+        } else {
+          return part.replace(/__TEMP_NEWLINE__/g, "\n");
+        }
+      })}
+    </ListGroup.Item>
+  );
+};
 
   return (
     <Container fluid className="my-3">
