@@ -41,6 +41,9 @@ function ChatBotComponent() {
   };
 
   useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
+    }
     handleOnline();
   }, []);
 
@@ -97,7 +100,9 @@ function ChatBotComponent() {
     console.log("message", message);
     const tempNewlineReplacement = "__TEMP_NEWLINE__";
     let text = message.text.replace(/\n/g, tempNewlineReplacement);
-    const parts = text.split(/(```.*?```|\$\$.*?\$\$|<.*?>)/gs);
+    const parts = text.split(
+      /(```.*?```|\$\$.*?\$\$|<.*?>|\\\(.+?\\\)|\\\[.+?\\\])/gs
+    );
 
     return (
       <ListGroup.Item key={index}>
@@ -109,7 +114,7 @@ function ChatBotComponent() {
               .trim()
               .replace(/__TEMP_NEWLINE__/g, "\n");
             return (
-              <SyntaxHighlighter language="python" style={vscDarkPlus}>
+              <SyntaxHighlighter key={i} language="python" style={vscDarkPlus}>
                 {code}
               </SyntaxHighlighter>
             );
@@ -118,9 +123,19 @@ function ChatBotComponent() {
               .slice(2, -2)
               .trim()
               .replace(/__TEMP_NEWLINE__/g, "\n");
-            return <BlockMath>{latex}</BlockMath>;
+            return <BlockMath key={i}>{latex}</BlockMath>;
           } else if (/<.*?>/gs.test(part)) {
             return parse(part);
+          } else if (part.startsWith("\\") && part.endsWith("\\")) {
+            const mathJaxPart = part;
+            return (
+              <div
+                key={i}
+                dangerouslySetInnerHTML={{
+                  __html: mathJaxPart,
+                }}
+              />
+            );
           } else {
             return part.replace(/__TEMP_NEWLINE__/g, "\n");
           }
