@@ -41,7 +41,7 @@ router.get("/statusCheck", async (req, res) => {
 });
 
 router.get("/clearChat", async (req, res) => {
-  messagesArray = [{role:"user", content: "Hello."}];
+  messagesArray = [{ role: "user", content: "Hello." }];
   console.log("Hit Clear");
   const completion = await openAi.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -67,6 +67,18 @@ router.post("/query", async (req, res) => {
     console.log(messagesArray);
     res.json(completion.data.choices[0].message);
   }
+});
+
+router.post("/generateImage", async (req, res) => {
+  const message = req.body.message;
+  const numberOfImages = 1;
+  const imageSize = "256x256";
+  const completion = await openAi.createImage({
+    prompt: message,
+    n: numberOfImages,
+    size: imageSize,
+  });
+  res.send(completion.data.data[0]);
 });
 
 module.exports = router;
