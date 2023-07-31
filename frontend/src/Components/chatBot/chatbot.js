@@ -110,7 +110,7 @@ function ChatBotComponent() {
       setResponseBool(true);
       const userMessage = {
         text: message,
-        user: userRole,
+        user: name,
       };
 
       setMessages([...messages, userMessage]);
@@ -143,7 +143,7 @@ function ChatBotComponent() {
     } else {
       const userMessage = {
         text: message,
-        user: userRole,
+        user: name,
       };
 
       setMessages([...messages, userMessage]);
@@ -185,7 +185,7 @@ function ChatBotComponent() {
     setResponseBool(true);
     const userMessage = {
       text: message,
-      user: userRole,
+      user: name,
     };
 
     setMessages([...messages, userMessage]);
@@ -285,9 +285,7 @@ function ChatBotComponent() {
             <div className="col-xs-12 col-sm-12 col-md-11"></div>
             <div className="col-xs-12 col-sm-12 col-md-1">
               <div className="row px-3">
-                <Button
-                  className="btn btn-secondary"
-                  onClick={handleLogout}>
+                <Button className="btn btn-secondary" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
