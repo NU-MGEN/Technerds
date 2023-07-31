@@ -19,7 +19,7 @@ let configureMessage = (message, role, keywords) => {
     message =
       "I am a learning Student and I just need a hint about " +
       message +
-      ". I want full text response in HTML Code If you cannot write code in HTML and If the question is mathematical derivation give me MathJax response else write in Python and provide me the code";
+      ". If the question is mathematical derivation give me MathJax response else write in Python and provide me the code and give me necessary source links and don't mention whether you can provide answer in Mathjax or python";
     if (keywords.length === 0) {
       message += ".";
     } else {

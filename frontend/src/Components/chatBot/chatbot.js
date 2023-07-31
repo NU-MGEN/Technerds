@@ -18,6 +18,14 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import parse from "html-react-parser";
 import { BlockMath } from "react-katex";
 
+import {
+  CSYE_6225,
+  CSYE_7200,
+  INFO_6105,
+  INFO_6150,
+} from "../../constants/keywords";
+import { searchKeyword } from "../../utils/searchKeywords";
+
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -29,6 +37,14 @@ function ChatBotComponent() {
     "Please select a course"
   );
   const [showBot, setShowBot] = useState(false);
+  const [errorMess, setError] = useState("");
+
+  const course_code_map = {
+    CSYE_6225: "Network Structures and Cloud Computing",
+    CSYE_7200: "Big-Data System Engineering Using Scala",
+    INFO_6105: "Data Science Engineering Methods and Tools.",
+    INFO_6150: "Web Design and User Experience Engineering.",
+  };
 
   const handleOnline = async (e) => {
     try {
@@ -67,32 +83,65 @@ function ChatBotComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setResponseBool(true);
-    const userMessage = {
-      text: message,
-      user: "Student",
+    let object_to_send = {
+      CSYE_6225: CSYE_6225,
+      CSYE_7200: CSYE_7200,
+      INFO_6105: INFO_6105,
+      INFO_6150: INFO_6150,
     };
+    let { key, found } = searchKeyword(object_to_send[selectedCourse], message);
+    console.log(key);
+   found = messages.length >1 ? found = true :found
+    if (found) {
+      setResponseBool(true);
+      const userMessage = {
+        text: message,
+        user: "Student",
+      };
 
-    setMessages([...messages, userMessage]);
+      setMessages([...messages, userMessage]);
 
-    try {
-      const response = await axios.post(`http://localhost:7912/openAI/query`, {
-        role: "Student",
-        message: message,
-        keywords: [selectedCourse],
-      });
+      try {
+        const response = await axios.post(
+          `http://localhost:7912/openAI/query`,
+          {
+            role: "Student",
+            message: message,
+            keywords: [course_code_map[selectedCourse]],
+          }
+        );
 
-      console.log("dta..", response.data.content);
+        console.log("dta..", response.data.content);
+        const botMessage = {
+          text: response.data.content, // or response.data.message, adjust according to your server response structure
+          user: "Tutor",
+        };
+
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+        setMessage(" ");
+        setResponseBool(false);
+      } catch (error) {
+        console.error("Error fetching AI response", error);
+        setError("Something went wrong at API level").then(
+          setResponseBool(false)
+        );
+      }
+    } else {
+      const userMessage = {
+        text: message,
+        user: "Student",
+      };
+
+      setMessages([...messages, userMessage]);
+
       const botMessage = {
-        text: response.data.content, // or response.data.message, adjust according to your server response structure
+        text: `we believe the question you asked doesn't belong to ${selectedCourse}, ${course_code_map[selectedCourse]}`, // or response.data.message, adjust according to your server response structure
         user: "Tutor",
       };
 
       setMessages((prevMessages) => [...prevMessages, botMessage]);
       setMessage(" ");
       setResponseBool(false);
-    } catch (error) {
-      console.error("Error fetching AI response", error);
     }
   };
   const handleClear = async (e) => {
@@ -150,7 +199,6 @@ function ChatBotComponent() {
   };
 
   const renderMessage = (message, index) => {
-    console.log("message", message);
     const tempNewlineReplacement = "__TEMP_NEWLINE__";
     let text = message.text.replace(/\n/g, tempNewlineReplacement);
     const parts = text.split(
@@ -219,19 +267,20 @@ function ChatBotComponent() {
                 <Form.Select
                   aria-label="Default select example"
                   value={selectedCourse}
-                  onChange={handleSelectChange}>
+                  onChange={handleSelectChange}
+                >
                   <option>Please select a course</option>
-                  <option value="Network Structures and Cloud Computing">
-                    CSYE 6225. Network Structures and Cloud Computing
+                  <option value="CSYE_6225">
+                    CSYE 6225. Network Structures and Cloud Computing.
                   </option>
-                  <option value="Big-Data System Engineering Using Scala">
-                    CSYE 7200. Big-Data System Engineering Using Scala
+                  <option value="CSYE_7200">
+                    CSYE 7200. Big-Data System Engineering Using Scala.
                   </option>
-                  <option value="Data Science Engineering Methods and Tools">
-                    INFO 6105. Data Science Engineering Methods and Tools
+                  <option value="CSYE_6105">
+                    INFO 6105. Data Science Engineering Methods and Tools.
                   </option>
-                  <option value="Web Design and User Experience Engineering">
-                    INFO 6150. Web Design and User Experience Engineering
+                  <option value="INFO_6150">
+                    INFO 6150. Web Design and User Experience Engineering.
                   </option>
                 </Form.Select>
               </Col>
@@ -280,7 +329,8 @@ function ChatBotComponent() {
                         </Button>
                         <Button
                           className="btn btn-danger"
-                          onClick={handleClear}>
+                          onClick={handleClear}
+                        >
                           <Trash3Fill />
                         </Button>
                         <br />
@@ -289,7 +339,8 @@ function ChatBotComponent() {
                     <div className="row my-3 mx-5 px-5">
                       <Button
                         className="btn btn-warning"
-                        onClick={handleImageGeneration}>
+                        onClick={handleImageGeneration}
+                      >
                         Generate Image
                       </Button>
                     </div>
