@@ -13,9 +13,9 @@ import {
 import { Trash3Fill } from "react-bootstrap-icons";
 import axios from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import parse from "html-react-parser";
-import { InlineMath, BlockMath } from "react-katex";
+import { BlockMath } from "react-katex";
 
 function ChatBotComponent() {
   const [messages, setMessages] = useState([]);
@@ -75,10 +75,14 @@ function ChatBotComponent() {
     e.preventDefault();
 
     try {
-      const response = await axios.get(`http://localhost:7912/openAI/clearChat`);
+      const response = await axios.get(
+        `http://localhost:7912/openAI/clearChat`
+      );
       console.log(response);
       const botMessage = {
-        text: response.data.content+" Cleared your History and connected back to your tutor again! Happy Learning!",
+        text:
+          response.data.content +
+          " Cleared your History and connected back to your tutor again! Happy Learning!",
         user: "OmniBot",
       };
 
@@ -105,7 +109,7 @@ function ChatBotComponent() {
               .trim()
               .replace(/__TEMP_NEWLINE__/g, "\n");
             return (
-              <SyntaxHighlighter language="python" style={solarizedlight}>
+              <SyntaxHighlighter language="python" style={vscDarkPlus}>
                 {code}
               </SyntaxHighlighter>
             );
@@ -158,8 +162,12 @@ function ChatBotComponent() {
                       placeholder="What do you want to learn today?"
                       className="me-3"
                     />
-                    <Button type="submit" className="me-2">Send</Button>
-                    <Button className="btn btn-danger" onClick={handleClear}><Trash3Fill /></Button>
+                    <Button type="submit" className="me-2">
+                      Send
+                    </Button>
+                    <Button className="btn btn-danger" onClick={handleClear}>
+                      <Trash3Fill />
+                    </Button>
                   </Form.Group>
                 </Form>
               </Card.Footer>
