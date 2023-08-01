@@ -151,7 +151,7 @@ function ChatBotComponent() {
       setMessages([...messages, userMessage]);
 
       const botMessage = {
-        text: `we believe the question you asked doesn't belong to ${selectedCourse}, ${course_code_map[selectedCourse]}`, // or response.data.message, adjust according to your server response structure
+        text: `I think your question isn't belonging to ${selectedCourse}, ${course_code_map[selectedCourse]} course. If you still want to clarify about this query, please reach out to your professor.`, // or response.data.message, adjust according to your server response structure
         user: gptRole,
       };
 
