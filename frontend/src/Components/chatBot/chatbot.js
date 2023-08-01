@@ -54,7 +54,8 @@ function ChatBotComponent() {
   const handleOnline = async (e) => {
     try {
       const response = await axios.get(
-        `http://localhost:7912/openAI/statusCheck`
+        //`http://localhost:7912/openAI/statusCheck`
+        `https://jq1gmbr3d5.execute-api.us-east-2.amazonaws.com/prod/openai/statuscheck`
       );
       console.log(response);
       if (response.status === 200) {
@@ -117,7 +118,8 @@ function ChatBotComponent() {
 
       try {
         const response = await axios.post(
-          `http://localhost:7912/openAI/query`,
+          // `http://localhost:7912/openAI/query`,
+          `https://jq1gmbr3d5.execute-api.us-east-2.amazonaws.com/prod/openai/query`,
           {
             role: userRole,
             message: message,
@@ -163,7 +165,8 @@ function ChatBotComponent() {
 
     try {
       const response = await axios.get(
-        `http://localhost:7912/openAI/clearChat`
+        //`http://localhost:7912/openAI/clearChat`
+        `https://jq1gmbr3d5.execute-api.us-east-2.amazonaws.com/prod/openai/clearchat`
       );
       console.log(response);
       const botMessage = {
@@ -192,7 +195,8 @@ function ChatBotComponent() {
 
     try {
       const response = await axios.post(
-        `http://localhost:7912/openAI/generateImage`,
+        // `http://localhost:7912/openAI/generateImage`,
+        `https://jq1gmbr3d5.execute-api.us-east-2.amazonaws.com/prod/openai/generateimage`,
         {
           message: message,
         }
@@ -277,9 +281,7 @@ function ChatBotComponent() {
     <Container fluid className="my-3">
       <Row>
         <Col xs={12} md={12} lg={12}>
-          <div className="row justify-content-center b">
-            Hi, {name}
-          </div>
+          <div className="row justify-content-center b">Hi, {name}</div>
           <br />
           <span className="lead my-3">
             OmniBot Status: <span className="h6">{onlineStatus}</span>
