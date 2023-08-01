@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <div className="d-flex align-items-center justify-content-center vh-100">
       <form onSubmit={handleSubmit} className="card p-4 shadow">
-        <div className="mb-3">
+        <div className="mb-3 text-center">
           <label htmlFor="userId" className="form-label">
             User ID:
           </label>
@@ -47,7 +47,7 @@ const Login = () => {
             className="form-control"
           />
         </div>
-        <div className="mb-3">
+        <div className="mb-3 text-center">
           <label htmlFor="password" className="form-label">
             Password:
           </label>
@@ -59,8 +59,8 @@ const Login = () => {
             className="form-control"
           />
         </div>
-        <div>
-          <button type="submit" className="btn btn-primary">
+        <div className="text-center">
+          <button type="submit" className="btn btn-primary ">
             Login
           </button>
         </div>
