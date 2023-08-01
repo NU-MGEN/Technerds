@@ -14,4 +14,4 @@ app.use(cors());
 
 app.use("/openAI", openAiRoutes);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Express listening on port ${port}!`));
